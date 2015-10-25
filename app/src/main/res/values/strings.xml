@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AndroidLogin</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="Email">Email</string>
+    <string name="password_input">Password</string>
+    <string name="Login">Login</string>
+</resources>
