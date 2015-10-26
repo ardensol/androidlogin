@@ -21,7 +21,10 @@ public class LoginActivity extends AppCompatActivity {
     public static final String TAG = LoginActivity.class.getSimpleName();
     public static final String PREFS_NAME = "CarlosLoginAppToken";
 
-    public static final String AUTH_TOKEN_KEY = "authToken";
+    public static final String API_ACCESS_TOKEN_KEY = "access-token";
+    public static final String UID_KEY = "uid";
+    public static final String CLIENT_KEY = "client";
+    ;
 
 
     protected EditText mEmail;
@@ -64,16 +67,24 @@ public class LoginActivity extends AppCompatActivity {
 
                             //get token from header
                             String accessToken = response.headers().get("Access-Token").toString();
+                            String uid = response.headers().get("Uid").toString();
+                            String client = response.headers().get("Client").toString();
 
                             //Save Token
                             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
                             SharedPreferences.Editor editor = settings.edit();
-                            editor.putString(AUTH_TOKEN_KEY, accessToken);
+                            editor.putString(API_ACCESS_TOKEN_KEY, accessToken);
+                            editor.putString(UID_KEY, uid);
+                            editor.putString(CLIENT_KEY, client);
 
                             // Commit the edits!
                             editor.commit();
 
+
                             Log.i(TAG, "success");
+                            Log.i(TAG, response.body().toString());
+                            Log.i(TAG, response.raw().toString());
+                            Log.i(TAG, response.headers().toString());
                         }
                         else {
                             Log.i(TAG, "Response Code Failure");
