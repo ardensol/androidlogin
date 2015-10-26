@@ -1,6 +1,7 @@
 package com.carlos.androidlogin;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -17,6 +19,10 @@ import retrofit.Retrofit;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = LoginActivity.class.getSimpleName();
+    public static final String PREFS_NAME = "CarlosLoginAppToken";
+
+    public static final String AUTH_TOKEN_KEY = "authToken";
+
 
     protected EditText mEmail;
     protected EditText mPassword;
@@ -54,15 +60,35 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Response<User> response, Retrofit retrofit) {
 
-                        String accessToken = response.headers().get("Access-Token").toString();
-                        
+                        if (response.code() == 200 ) {
 
-                        Log.i(TAG, "success");
+                            //get token from header
+                            String accessToken = response.headers().get("Access-Token").toString();
+
+                            //Save Token
+                            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString(AUTH_TOKEN_KEY, accessToken);
+
+                            // Commit the edits!
+                            editor.commit();
+
+                            Log.i(TAG, "success");
+                        }
+                        else {
+                            Log.i(TAG, "Response Code Failure");
+                            Toast.makeText(LoginActivity.this,
+                                    R.string.standard_error_message,
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
                         Log.i(TAG, "Failure");
+                        Toast.makeText(LoginActivity.this,
+                                R.string.standard_error_message,
+                                Toast.LENGTH_LONG).show();
                         finish();
                     }
                 });
