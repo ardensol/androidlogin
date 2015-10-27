@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String API_ACCESS_TOKEN_KEY = "access-token";
     public static final String UID_KEY = "uid";
-    public static final String EMAIL_KEY = "email";
     public static final String CLIENT_KEY = "client";
 
 
@@ -41,15 +40,6 @@ public class MainActivity extends AppCompatActivity {
         if (authToken != null || uid != null || client != null) {
             AuthenticateAuthTokenInterface authenticateToken = ServiceGenerator
                     .createService(AuthenticateAuthTokenInterface.class);
-
-            //initialize params with hashmap to send out to api
-//            Map<String,String> options = new HashMap<String, String>();
-//            {
-//                options.put(UID_KEY,uid);
-//                options.put(API_ACCESS_TOKEN_KEY,authToken);
-//            }
-
-
 
             Call<User> call = authenticateToken.getUserToken(authToken, uid, client);
 
